@@ -1,18 +1,41 @@
 // composant Register de l'app 
 // importation des dependances
-import React from "react";
+import React , {useState} from "react";
 import { View, Text, TextInput, Button, TouchableOpacity, StyleSheet } from "react-native";
 // pour utiliser un bouton on va preferer le composant "TouchableOpacity" au lieu du composant "Button" pour gerer plus facillement le style du bouton.
 
 
 // declaration et exportation du composant Login
 export default function Login(){
+  const [prenom, setPrenom] = useState('');
+  const [nom, setNom] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handlePrenom = (value) => {
+    setPrenom(value);
+
+  }
+  const handleNom = value => {
+    setNom(value);
+  }
+  const handleEmail = (value) => {
+    setEmail(value);
+  }
+  const handlePassword = (value) => {
+    setPassword(value);
+  }
+
+  const handleSubmit  = value => {
+    alert(prenom + nom + email + password)
+  }
   return(
     <View style={styles.container}>
    
       <TextInput
         style={styles.input}
         placeholder="First Name"
+        onChangeText = {(e) => handlePrenom(e)}
       />
 
       <TextInput

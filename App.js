@@ -20,3 +20,15 @@ export default function App() {
     </NavigationContainer>
   )
 }
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAxjV9PKUuTCa9VvVPmw1RkiOFbh8GB43g",
+  authDomain: "react-native-day2.firebaseapp.com",
+  projectId: "react-native-day2",
+  storageBucket: "react-native-day2.appspot.com",
+  messagingSenderId: "447091449964",
+  appId: "1:447091449964:web:2faede77446dc9c3bb3849"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
