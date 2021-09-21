@@ -5,6 +5,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import Login from './screens/Login';
 import Register from './screens/Register';
+import firebase from 'firebase';
 
 // pour gerer une navigation avec react native on doit utiliser la bibliotheque react native navigation
 
@@ -31,4 +32,4 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const app = firebase.initializeApp(firebaseConfig);
