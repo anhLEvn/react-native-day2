@@ -1,4 +1,4 @@
-// composant login de l'app 
+// composant Register de l'app 
 // importation des dependances
 import React from "react";
 import { View, Text, TextInput, Button, TouchableOpacity, StyleSheet } from "react-native";
@@ -9,24 +9,31 @@ import { View, Text, TextInput, Button, TouchableOpacity, StyleSheet } from "rea
 export default function Login(){
   return(
     <View style={styles.container}>
+   
       <TextInput
         style={styles.input}
-        placeholder="Votre login"
+        placeholder="First Name"
       />
 
       <TextInput
         style={styles.input}
-        placeholder="Votre mot de passe"
+        placeholder="Last Name"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
       />
 
       {/* <Button title="Connexion"/> */}
-      <TouchableOpacity style={styles.button} >
-        <Text style={styles.text1}>Connexion</Text>
+      <TouchableOpacity style={styles.button}>
+        <Text style={styles.text}>Inscription</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.text2}>Pas avoir un compte</Text>
-      </TouchableOpacity>
+      
     </View>
   )
 }
@@ -36,9 +43,10 @@ const styles = StyleSheet.create({
   container:{
     flex: 1,
     width: "100%",
-    justifyContent: "center",
+    //justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#e5e5e5"
+    backgroundColor: "#e5e5e5",
+    paddingtop: "10%"
   },
   input:{
     width: "90%",
@@ -56,12 +64,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 10,
     borderWidth: 3,
-    marginTop: 20
+    marginTop: 50
   },
-  text1:{
+  textEmpty:{
+      marginTop: 50,
+  }, 
+
+  text:{
     fontSize: 20
-  },
-  text2:{
-    fontSize: 16
   }
 })
