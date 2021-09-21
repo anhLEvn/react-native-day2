@@ -3,10 +3,15 @@
 import React, {useState} from "react";
 import { View, Text, TextInput, Button, TouchableOpacity, StyleSheet } from "react-native";
 // pour utiliser un bouton on va preferer le composant "TouchableOpacity" au lieu du composant "Button" pour gerer plus facillement le style du bouton.
+import firebase from 'firebase';
 
 
-// declaration et exportation du composant Login
-export default function Login(){
+/**
+ * declaration et exportation du composant Login
+ * le composant login prends une propiete qui à pour valeur une fonction
+ * executable à partir d'ici
+ */
+export default function Login(props){
   // declaration des variables d'etat
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
@@ -30,7 +35,23 @@ export default function Login(){
   // creation de la fonction handleSubmit qui permet de soumettre le formulaire
   const handleSubmit = () => {
     // requette vers la base de données pour verifier si l'utilisateur existe
-    alert(login+" "+password);
+    // alert(login+" "+password);
+    /**
+     * methode permettant de connecter un utilisateur deja existant
+     */
+    firebase.auth().signInWithEmailAndPassword(login, password)
+    .then((userCredential) => {
+      // si l'utilisateur existe
+      // var user = userCredential.user;
+      console.log('success');
+      props.miseAjourVue('user');
+    })
+    .catch((error) => {
+      // si l'utilisateur n'existe pas
+      // var errorCode = error.code;
+      var errorMessage = error.message;
+      console.log(errorMessage);
+    });
   }
 
   return(
