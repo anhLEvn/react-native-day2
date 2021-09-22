@@ -16,7 +16,7 @@ const Drawer = createDrawerNavigator();
 
 export default function App() {
   // variable d'etat pou condition l'affichage
-  const [vue, setVue] = useState(null);
+  const [vue, setVue] = useState("Home");
 
   /* 
   pour pouvoir executer la fonction setVue depuis le composant Login on doit la passer en paramettre comme propiete ce qui permettra pouvoir modifier la variable d'etat vue à partir de Login et donc de rendre une vue differente en fonction de la valeur que contient cette variable
