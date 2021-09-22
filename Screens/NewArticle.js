@@ -1,6 +1,6 @@
 // importation des dependances
 import React, {useState} from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import firebase from 'firebase';
 
@@ -11,6 +11,7 @@ export default function NewArticle(){
   const [titre, setTitre] = useState('');
   const [description, setDescription] = useState('');
   const [prix, setPrix] = useState('');
+  const [loader, setLoader] = useState(null);
 
   // fonction pour charger une image
   const pickImage = async () => {
@@ -21,8 +22,6 @@ export default function NewArticle(){
       quality: 1,
     });
 
-    console.log(result);
-
     if (!result.cancelled) {
       setImage(result.uri);
     }
@@ -30,6 +29,7 @@ export default function NewArticle(){
 
   // fonction pour envoyer l'article dans la base de donnees
   const handleSubmit = () => {
+    setLoader(<ActivityIndicator size="small" color="#0000ff" />)
     /*nos image seront stocker dans le dossier images creer dans la partie storage de firebase
     pour cela creer une reference est passer à la methode ref comme paramettre le chemin vers le dossier ou l'image sera enregistrer le chamin complet sera le nom du dossier plus le nom de l'image
     */
@@ -55,6 +55,7 @@ export default function NewArticle(){
         })
         .then(() => {
           console.log("article creer!");
+          setLoader(null);
         })
         .catch((error) => {
           console.error("Error writing document: ", error);
@@ -83,13 +84,14 @@ export default function NewArticle(){
         placeholder="Titre de l'article"
         onChangeText={(e) => setTitre(e)}
       />
+      <View style={styles.loader}>{loader}
+      </View>
       <TextInput
         style={styles.textarea}
         placeholder="Description de l'article"
         multiline={true}
         onChangeText={(e) => setDescription(e)}
       />
-
       <TextInput
         style={styles.input}
         placeholder="Prix de l'article"
@@ -138,7 +140,7 @@ const styles = StyleSheet.create({
     height: 150,
     borderWidth: 1,
     borderRadius: 5,
-    marginTop: 20,
+    marginTop: 10,
     paddingLeft: 15,
   },
   add:{
@@ -147,5 +149,8 @@ const styles = StyleSheet.create({
   },
   text:{
     fontSize: 20,
+  },
+  loader:{
+    marginTop: 10,
   }
 })

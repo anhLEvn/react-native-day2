@@ -9,6 +9,7 @@ import 'react-native-gesture-handler';
 import firebase from 'firebase';
 import Home from './screens/Home';
 import NewArticle from './screens/NewArticle';
+import { AntDesign, Ionicons, Entypo } from '@expo/vector-icons'; 
 
 // pour gerer une navigation avec react native on doit utiliser la bibliotheque react native navigation
 
@@ -16,7 +17,7 @@ const Drawer = createDrawerNavigator();
 
 export default function App() {
   // variable d'etat pou condition l'affichage
-  const [vue, setVue] = useState("Home");
+  const [vue, setVue] = useState('null');
 
   /* 
   pour pouvoir executer la fonction setVue depuis le composant Login on doit la passer en paramettre comme propiete ce qui permettra pouvoir modifier la variable d'etat vue à partir de Login et donc de rendre une vue differente en fonction de la valeur que contient cette variable
@@ -29,11 +30,35 @@ export default function App() {
     return (
       <NavigationContainer>
         <Drawer.Navigator>
-          <Drawer.Screen name="Accueil" component={Home} />
-          <Drawer.Screen name="Se connecter">
+          <Drawer.Screen name="Accueil" component={Home} 
+            options={{
+              drawerIcon: (({focused}) => (
+                <AntDesign name="home" size={24} color={focused? "#2a9d8f": "black"} />
+              )) 
+            }}
+          />
+          <Drawer.Screen name="Se connecter"
+            options={{
+              drawerIcon: (({focused}) => (
+                <AntDesign 
+                  name="login" 
+                  size={24} 
+                  color={focused ? "#2a9d8f": "black"} />
+              ))
+            }}
+          >
             {updateScreen}
           </Drawer.Screen>
-          <Drawer.Screen name="S'inscrire" component={Register} />
+          <Drawer.Screen name="S'inscrire" component={Register} 
+            options={{
+              drawerIcon: (({focused}) => (
+                <Entypo 
+                  name="add-user" 
+                  size={24} 
+                  color={focused?"#2a9d8f" : "black"} />
+              ))
+            }}
+          />
         </Drawer.Navigator>
       </NavigationContainer>
     )
@@ -41,14 +66,33 @@ export default function App() {
     return (
       <NavigationContainer>
         <Drawer.Navigator>
-          <Drawer.Screen name="Accueil" component={Home} />
-          <Drawer.Screen name="Creer un article" component={NewArticle} />
+          <Drawer.Screen name="Home" component={Home} 
+            options={{
+              drawerIcon: (({focused}) => (
+                <AntDesign 
+                  name="home" 
+                  size={30} 
+                  color={focused? "#2a9d8f": "black"} />
+              )) 
+            }}
+          />
+          <Drawer.Screen name="Creer un article" component={NewArticle} 
+            options={{ 
+              drawerIcon: (({focused}) => (
+                <Ionicons 
+                  name="add-circle-outline" 
+                  size={24} 
+                  color={ focused ? "#2a9d8f" : "black"}/>
+              ))
+            }}
+          />
         </Drawer.Navigator>
       </NavigationContainer>
     )
   }
 
 }
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyAxjV9PKUuTCa9VvVPmw1RkiOFbh8GB43g",
