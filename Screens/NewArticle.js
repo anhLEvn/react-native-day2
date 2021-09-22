@@ -1,5 +1,5 @@
 // importation des dependances
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import firebase from 'firebase';
@@ -12,6 +12,10 @@ export default function NewArticle(){
   const [description, setDescription] = useState('');
   const [prix, setPrix] = useState('');
   const [loader, setLoader] = useState(null);
+
+  const titleRef = useRef();
+  const descriptionRef = useRef();
+  const priceRef = useRef();
 
   // fonction pour charger une image
   const pickImage = async () => {
@@ -29,45 +33,57 @@ export default function NewArticle(){
 
   // fonction pour envoyer l'article dans la base de donnees
   const handleSubmit = () => {
-    setLoader(<ActivityIndicator size="small" color="#0000ff" />)
-    /*nos image seront stocker dans le dossier images creer dans la partie storage de firebase
-    pour cela creer une reference est passer à la methode ref comme paramettre le chemin vers le dossier ou l'image sera enregistrer le chamin complet sera le nom du dossier plus le nom de l'image
-    */
-    var storageRef = firebase.storage().ref('images/'+ new Date().toString());
-    var message = image;
-    storageRef.putString(message, 'data_url')
-    .then((snapshot) => {
-      /* 
-      si l'image est uploader on recupere l'url que firebase genere et qui permetre d'y acceder plus tard et cette url sera enregistrer dans la partie database avec les autres attribut de l'article
+    if(image !== null){
+      setLoader(<ActivityIndicator size="small" color="#0000ff" />)
+      /*nos image seront stocker dans le dossier images creer dans la partie storage de firebase
+      pour cela creer une reference est passer à la methode ref comme paramettre le chemin vers le dossier ou l'image sera enregistrer le chamin complet sera le nom du dossier plus le nom de l'image
       */
-      const urlimage = storageRef.getDownloadURL()
-      .then((url) => {
-        // console.log(url)
-        /**
-         * enregistrement de l'article dans la partie database
+      var storageRef = firebase.storage().ref('images/'+ new Date().toString());
+      var message = image;
+      storageRef.putString(message, 'data_url')
+      .then((snapshot) => {
+        /* 
+        si l'image est uploader on recupere l'url que firebase genere et qui permetre d'y acceder plus tard et cette url sera enregistrer dans la partie database avec les autres attribut de l'article
         */
-        const db = firebase.firestore();
-        db.collection("articles").doc().set({
-          titre: titre,
-          description: description,
-          prix: prix,
-          urlImg: url
-        })
-        .then(() => {
-          console.log("article creer!");
-          setLoader(null);
+        const urlimage = storageRef.getDownloadURL()
+        .then((url) => {
+          // console.log(url)
+          /**
+           * enregistrement de l'article dans la partie database
+          */
+          const db = firebase.firestore();
+          db.collection("articles").doc().set({
+            titre: titre,
+            description: description,
+            prix: prix,
+            urlImg: url
+          })
+          .then(() => {
+            // console.log("article creer!");
+            resetFform();
+            setImage(null);
+            setLoader(null);
+          })
+          .catch((error) => {
+            console.error("Error writing document: ", error);
+          });
         })
         .catch((error) => {
-          console.error("Error writing document: ", error);
-        });
+          console.log(error);
+        })
       })
       .catch((error) => {
         console.log(error);
       })
-    })
-    .catch((error) => {
-      console.log(error);
-    })
+    }else{
+      alert("choisir image");
+    }
+  }
+
+  const resetFform = () => {
+    titleRef.current.setNativeProps({text:""});
+    descriptionRef.current.setNativeProps({text: ""});
+    priceRef.current.setNativeProps({text:""});
   }
 
   return(
@@ -83,19 +99,23 @@ export default function NewArticle(){
         style={styles.input}
         placeholder="Titre de l'article"
         onChangeText={(e) => setTitre(e)}
+        ref={titleRef}
       />
-      <View style={styles.loader}>{loader}
+      <View style={styles.loader}>
+      {loader}
       </View>
       <TextInput
         style={styles.textarea}
         placeholder="Description de l'article"
         multiline={true}
         onChangeText={(e) => setDescription(e)}
+        ref={descriptionRef}
       />
       <TextInput
         style={styles.input}
         placeholder="Prix de l'article"
         onChangeText={(e) => setPrix(e)}
+        ref={priceRef}
       />
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
         <Text style={styles.text}>Creer</Text>
