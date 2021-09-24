@@ -1,15 +1,18 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Card from './Card';
 import firebase from 'firebase'
 
 export default function Article({navigation}) {
   const [listeArticle, setListeArticle] = useState([]);
 
+  // le useEfect va s'executer une le redue effectuer
   useEffect(() => {
     getListeArticle()
   }, [])
 
+  // fonction pour recuperer l'ensemble des article dans firebase 
   const getListeArticle = () => {
     const db = firebase.firestore();
     db.collection("articles").get()
@@ -23,7 +26,7 @@ export default function Article({navigation}) {
         };
         liste.push(item);
       })
-      setListeArticle(liste);
+      setListeArticle(liste); // mise a jour de la variable d'etat listeArticle
       // console.log(liste);
     })
     .catch((err) => {
@@ -36,37 +39,33 @@ export default function Article({navigation}) {
     <Text>{item}</Text>
   );
 
-  const navig = (item) => {
-    navigation.navigate("Details", {idItem: item})
+  function  goDetail(item) {
+    navigation.navigate("Detail", {idItem: item, update: getListeArticle})
   }
 
   return(
     <View style={styles.container}>
-      {/* <Text>Home component</Text> */}
-      <FlatList
-        data={listeArticle}
+      {/* <FlatList
+        data={props.articleListe}
         renderItem={
           ({item}) => (
-            <>
-            <Card value={item} nav={navig}/>
-            {/* <TouchableOpacity onPress={() => navigation.navigate("Detail", {idItem: item})}>
-              <Text>Detail</Text>
-            </TouchableOpacity> */}
-            </>
-            // <>
-            // <Text style={styles.item}>{item.id}</Text>
-            // <Text style={styles.item}>{item.data.titre}</Text>
-            // <Text style={styles.item}>{item.data.prix}</Text>
-            // <Text style={styles.item}>{item.data.description}</Text>
-            // <Image source={item.data.urlImg} style={{width: 100, height: 100}}/>
-            // </>
+            <Card value={item} detailScreen={goDetail}/>
           )
         }
-      />
+      /> */}
+      {
+        listeArticle.map(article => (
+          <Card key={article.id} value={article} detailScreen={goDetail} updateListe={getListeArticle}/>
+        ))
+      }
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  
+  container:{
+    // width: "100%",
+    // justifyContent: "center",
+    // alignItems: "center",
+  }
 })

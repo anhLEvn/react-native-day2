@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
@@ -18,6 +18,37 @@ const Drawer = createDrawerNavigator();
 export default function App() {
   // variable d'etat pou condition l'affichage
   const [vue, setVue] = useState('null');
+  // const [listeArticle, setListeArticle] = useState([]);
+  // // const listeArticle =  [];
+
+  // // le useEfect va s'executer une le redue effectuer
+  // useEffect(() => {
+  //   getListeArticle()
+  // }, [])
+
+
+  // // fonction pour recuperer l'ensemble des article dans firebase 
+  // const getListeArticle = () => {
+  //   const db = firebase.firestore();
+  //   db.collection("articles").get()
+  //   .then((querySnapshot) => {
+  //     var liste = Array();
+  //     querySnapshot.forEach((doc) => {
+  //       // console.log(doc.id, " => ", doc.data());
+  //       const item = {
+  //         id: doc.id,
+  //         data: doc.data(),
+  //       };
+  //       liste.push(item);
+  //     })
+  //     setListeArticle(liste); // mise a jour de la variable d'etat listeArticle
+  //     // console.log(liste);
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //   })
+  
+  // }
 
   /* 
   pour pouvoir executer la fonction setVue depuis le composant Login on doit la passer en paramettre comme propiete ce qui permettra pouvoir modifier la variable d'etat vue à partir de Login et donc de rendre une vue differente en fonction de la valeur que contient cette variable

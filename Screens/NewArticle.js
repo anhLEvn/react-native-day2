@@ -5,17 +5,19 @@ import * as ImagePicker from 'expo-image-picker';
 import firebase from 'firebase';
 
 // definition et exportation du composant
-export default function NewArticle(){
+export default function NewArticle(props){
   // declaration des variables d'etats
   const [image, setImage] = useState(null);
   const [titre, setTitre] = useState('');
   const [description, setDescription] = useState('');
   const [prix, setPrix] = useState('');
   const [loader, setLoader] = useState(null);
+  const [qte, setQte] = useState(0);
 
   const titleRef = useRef();
   const descriptionRef = useRef();
   const priceRef = useRef();
+  const qteRef = useRef();
 
   // fonction pour charger une image
   const pickImage = async () => {
@@ -56,13 +58,16 @@ export default function NewArticle(){
             titre: titre,
             description: description,
             prix: prix,
-            urlImg: url
+            urlImg: url,
+            favorite: 0,
+            quantite: qte
           })
           .then(() => {
             // console.log("article creer!");
             resetFform();
             setImage(null);
             setLoader(null);
+            props.updateListe();
           })
           .catch((error) => {
             console.error("Error writing document: ", error);
@@ -84,6 +89,7 @@ export default function NewArticle(){
     titleRef.current.setNativeProps({text:""});
     descriptionRef.current.setNativeProps({text: ""});
     priceRef.current.setNativeProps({text:""});
+    qteRef.current.setNativeProps({text:""});
   }
 
   return(
@@ -116,6 +122,12 @@ export default function NewArticle(){
         placeholder="Prix de l'article"
         onChangeText={(e) => setPrix(e)}
         ref={priceRef}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Quantite"
+        onChangeText={(e) => setQte(e)}
+        ref={qteRef}
       />
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
         <Text style={styles.text}>Creer</Text>
